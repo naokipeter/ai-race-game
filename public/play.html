@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a1640">
+<title>AI Race – Player</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a1640'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='900' font-size='15' text-anchor='middle' fill='white'%3EAI%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/shared.css">
+<style>
+  body { position: fixed; inset: 0; overflow: hidden; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+  #app { height: 100%; display: flex; flex-direction: column; padding-bottom: env(safe-area-inset-bottom); }
+  header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--navy); color: #fff; min-height: 54px; }
+  header .name { font-family: var(--cond); font-weight: 700; font-size: 1.35rem; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  header .stat { text-align: center; font-family: var(--cond); line-height: 1; }
+  header .stat b { display: block; font: 700 1.5rem/1 var(--cond); }
+  header .stat span { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
+  #view { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 14px 0; text-align: center; }
+  .pad { padding: 0 22px; }
+  h2 { font-family: var(--display); font-size: 1.5rem; margin: 0; letter-spacing: .05em; text-transform: uppercase; color: var(--navy); }
+  p { margin: 0; font-size: 1.1rem; color: var(--muted); }
+  .big { font: 700 4.2rem/1 var(--cond); color: var(--navy); }
+  .good { color: var(--green); } .bad { color: var(--red); } .warn { color: var(--orange); }
+
+  /* join */
+  form { display: grid; gap: 14px; width: min(340px, 86vw); }
+  input { font: 600 1.5rem var(--body); text-align: center; border: 2px solid var(--line); border-radius: 12px; padding: .55em; color: var(--navy); width: 100%; user-select: text; -webkit-user-select: text; }
+  input:focus { outline: 3px solid var(--sky); }
+
+  /* carousel */
+  .hint { font-family: var(--cond); font-size: 1.05rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .carousel {
+    --cw: min(68vw, calc((100dvh - 250px) * .632));
+    flex: none; width: 100%; display: flex; gap: 5vw; overflow-x: auto; scroll-snap-type: x mandatory;
+    padding: 26px calc((100vw - var(--cw)) / 2) 14px; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .carousel::-webkit-scrollbar { display: none; }
+  .card { flex: none; width: var(--cw); scroll-snap-align: center; scroll-snap-stop: always; position: relative;
+    transition: transform .25s, opacity .25s, filter .25s; transform: scale(.88); opacity: .55; }
+  .card.cur { transform: scale(1); opacity: 1; filter: drop-shadow(0 10px 18px rgba(10,22,64,.28)); }
+  .card img { display: block; width: 100%; aspect-ratio: 366 / 579; border-radius: 12px; pointer-events: none; }
+  .target { position: absolute; top: -17px; left: 50%; transform: translateX(-50%); white-space: nowrap;
+    font-family: var(--cond); font-weight: 700; font-size: 1.1rem; letter-spacing: .04em; padding: .2em .8em; border-radius: 99px; color: #fff; background: var(--green); box-shadow: 0 0 0 3px var(--paper); }
+  .target.none { background: var(--muted); }
+  .dots { display: flex; gap: 8px; }
+  .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); transition: .2s; }
+  .dots i.on { background: var(--navy); transform: scale(1.3); }
+  #lock { width: min(340px, 86vw); font-size: 1.05rem; }
+
+  /* locked */
+  .cardback.hand { width: min(56vw, calc((100dvh - 300px) * .632)); aspect-ratio: 366 / 579; --ai: 2.4rem; animation: flipin .5s cubic-bezier(.2,.9,.3,1.2); }
+  @keyframes flipin { from { transform: rotateY(90deg) scale(.9); } to { transform: none; } }
+  .mine { width: min(40vw, calc((100dvh - 380px) * .632)); border-radius: 10px; display: block; }
+  .pop { animation: pop .45s cubic-bezier(.2,.9,.3,1.4); }
+  @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+  #offline { position: fixed; left: 0; right: 0; bottom: 0; padding: 8px; background: var(--red); color: #fff; font-weight: 600; text-align: center; display: none; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="hdr" hidden>
+    <span class="hex pc" id="seat"></span>
+    <span class="name" id="pname"></span>
+    <span class="stat"><b id="cap">0</b><span>Capability</span></span>
+    <span class="stat"><b id="pts">0</b><span>Saved</span></span>
+  </header>
+  <div id="view"></div>
+</div>
+<div id="offline">Reconnecting…</div>
+<script src="/play.js"></script>
+</body>
+</html>

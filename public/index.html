@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Race Game</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a1640'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='900' font-size='15' text-anchor='middle' fill='white'%3EAI%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/shared.css">
+<style>
+  main { min-height: 100%; display: grid; place-items: center; padding: 24px; }
+  .box { width: min(560px, 100%); text-align: center; display: grid; gap: 22px; }
+  h1 { font-size: clamp(2.6rem, 9vw, 5rem); margin: 0; line-height: .95; color: var(--navy); }
+  h1 small { display: block; font-size: .28em; letter-spacing: .5em; margin-top: .6em; color: var(--blue); }
+  .panel { background: #fff; border: 2px solid var(--line); border-radius: 14px; padding: 22px; display: grid; gap: 12px; }
+  .panel p { margin: 0; color: var(--muted); }
+  form { display: flex; gap: 10px; justify-content: center; }
+  input { font-family: var(--display); font-size: 1.5rem; width: 6.5em; text-align: center; letter-spacing: .25em; text-transform: uppercase;
+    border: 2px solid var(--line); border-radius: 10px; padding: .4em; color: var(--navy); }
+  input:focus { outline: 3px solid var(--sky); }
+  @media (max-width: 700px) { .hostpanel { order: 2; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="box">
+    <h1 class="display">AI Race<small>The Game</small></h1>
+    <div class="panel hostpanel">
+      <p>On the big screen in the middle of your table (laptop or tablet, landscape):</p>
+      <button class="btn go" id="host">Host a table</button>
+      <div class="error" id="hosterr"></div>
+    </div>
+    <div class="panel">
+      <p>On your phone: scan the QR code on the big screen, or enter the table code.</p>
+      <form id="join">
+        <input id="code" maxlength="4" placeholder="CODE" autocomplete="off" autocapitalize="characters" aria-label="Table code">
+        <button class="btn">Join</button>
+      </form>
+    </div>
+    <div class="credit">AI Race Game by Naoki Peter · CC BY-SA 4.0</div>
+  </div>
+</main>
+<script>
+  document.getElementById('host').onclick = async () => {
+    try {
+      const r = await fetch('/api/create', { method: 'POST' });
+      const d = await r.json();
+      if (!r.ok) throw new Error(d.error);
+      localStorage.setItem('airace-host-' + d.code, d.token);
+      location.href = '/host?room=' + d.code;
+    } catch (e) { document.getElementById('hosterr').textContent = e.message || 'Could not reach the server.'; }
+  };
+  document.getElementById('join').onsubmit = (e) => {
+    e.preventDefault();
+    const c = document.getElementById('code').value.trim().toUpperCase();
+    if (c.length === 4) location.href = '/play?room=' + c;
+  };
+</script>
+</body>
+</html>
