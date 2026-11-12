@@ -251,3 +251,8 @@ body { position: fixed; inset: 0; overflow: hidden; user-select: none; -webkit-u
 .stagebody.fill { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .stagebody.fill .count { margin: auto 0; }
 .stage .verdict:empty { display: none; }
+
+/* seat order arrows: drawn, so they do not depend on the font */
+.tri { width: .75em; height: .65em; vertical-align: baseline; }
+#seats li button { display: inline-grid; place-items: center; }
+#seats li button .tri { width: 1.1em; height: .95em; }

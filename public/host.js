@@ -137,7 +137,7 @@ async function renderLobby(n) {
     const li = document.createElement('li');
     li.className = `seat${p.seat}` + (p.connected ? '' : ' off');
     li.innerHTML = `<span class="hex pc">${p.seat}</span><span class="nm">${esc(p.name)}${p.connected ? '' : ' 📵'}</span>
-      <button data-a="up" ${i === 0 ? 'disabled' : ''}>▲</button><button data-a="down" ${i === n.players.length - 1 ? 'disabled' : ''}>▼</button><button data-a="kick">✕</button>`;
+      <button data-a="up" title="Move up" ${i === 0 ? 'disabled' : ''}><svg class="tri" viewBox="0 0 12 10" aria-hidden="true"><path d="M6 1 11 9H1z" fill="currentColor"/></svg></button><button data-a="down" title="Move down" ${i === n.players.length - 1 ? 'disabled' : ''}><svg class="tri" viewBox="0 0 12 10" aria-hidden="true"><path d="M6 9 1 1h10z" fill="currentColor"/></svg></button><button data-a="kick">✕</button>`;
     li.querySelector('[data-a=up]').onclick = () => act('move', { id: p.id, dir: -1 });
     li.querySelector('[data-a=down]').onclick = () => act('move', { id: p.id, dir: 1 });
     li.querySelector('[data-a=kick]').onclick = () => act('kick', { id: p.id });
