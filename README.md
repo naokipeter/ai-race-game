@@ -4,6 +4,8 @@ Digital table version of the *AI Race Game* by Naoki Peter (CC BY-SA 4.0).
 One big screen per table shows the board; every player uses their phone as a hand of cards.
 Rules and design decisions: see [SPEC.md](SPEC.md).
 
+![The big screen during a game: capability tracks, safety track with the collapse zone, and the collapse roll](docs/board.png)
+
 ## Run
 
 Needs Node.js 18 or newer. No `npm install`, no database.
