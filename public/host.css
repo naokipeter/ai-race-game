@@ -117,7 +117,8 @@ body { position: fixed; inset: 0; overflow: hidden; user-select: none; -webkit-u
 @keyframes spulse { 50% { transform: scale(1.35); } }
 .risk { display: grid; grid-template-columns: repeat(13, 1fr); gap: .35vw; margin-top: .5vh; font: 700 clamp(.65rem, 1vw, .9rem) var(--cond); letter-spacing: .1em; text-transform: uppercase; text-align: center; }
 .risk span { border-top: 2px solid currentColor; padding-top: 2px; }
-.risk .skull { border: 0; padding: 0; color: #7a0c0c; font-size: 1.3em; line-height: 1; }
+.risk .skull { border: 0; padding: 0; color: #7a0c0c; line-height: 1; display: flex; justify-content: center; }
+.risk .skull svg { height: 1.7em; width: auto; }
 .r-crit { color: #c41818; } .r-high { color: #d97706; } .r-mod { color: #5a9a12; } .r-safe { color: #0f5a2b; }
 
 /* ---------- Stage ---------- */
