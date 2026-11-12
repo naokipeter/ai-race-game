@@ -112,7 +112,7 @@ function render(before) {
 function lobby(me) {
   view.innerHTML = `<div class="pad pop"><h2>You're in, ${esc(me.name)}!</h2></div>
     <div class="big">Seat ${me.seat}</div>
-    <p class="pad">Put your phone down and look at the big screen. The game starts there.</p>`;
+    <p class="pad">Put your phone down and look at the board. The game starts there.</p>`;
 }
 
 function pick() {
@@ -159,7 +159,7 @@ function locked() {
   view.innerHTML = `
     <div class="cardback hand"></div>
     <h2>Locked in</h2>
-    <p class="pad">Phone down, eyes up — the reveal happens on the big screen.</p>
+    <p class="pad">Phone down, eyes on the board — the reveal happens there.</p>
     <button class="btn ghost" id="undo">Change card</button>`;
   $('#undo').onclick = () => act('unchoose');
 }
@@ -200,7 +200,7 @@ function result(me, res) {
       const auto = roll.autoReleased[me.id];
       html += `<div class="pad pop"><h2 class="good">No collapse</h2>${auto ? `<p>Auto-release: ${auto.points} ${auto.points === 1 ? 'point' : 'points'} saved.</p>` : ''}</div>`;
     }
-  } else if (state.phase === 'revealed') html += '<p class="pad">Watch the big screen for the collapse roll.</p>';
+  } else if (state.phase === 'revealed') html += '<p class="pad">Watch the board for the collapse roll.</p>';
   view.innerHTML = html;
   if (res && state.phase === 'revealed') buzz(40);
 }
