@@ -14,6 +14,7 @@ let state = null;
 let viewKey = '';
 let current = 0; // index of the card in the middle of the carousel
 let es = null;
+let justLocked = false; // animate the flip only right after pressing Play
 
 if (!room) location.replace('/');
 else if (token) connect();
@@ -117,14 +118,14 @@ function lobby(me) {
 
 function pick() {
   view.innerHTML = `
-    <div class="hint">Generation ${state.gen} · Round ${state.round} — swipe to choose</div>
+    <div class="hint">Generation ${state.gen} · Round ${state.round}</div>
+    <div class="dots">${CARDS.map(() => '<i></i>').join('')}</div>
     <div class="carousel" id="car">${CARDS.map((c) => `
       <div class="card" data-card="${c}">
         ${c.startsWith('expose') ? '<span class="target"></span>' : ''}
         <img src="/img/${c}.jpg" alt="${LABEL[c]}" draggable="false">
       </div>`).join('')}</div>
-    <div class="dots">${CARDS.map(() => '<i></i>').join('')}</div>
-    <button class="btn go" id="lock"></button>`;
+    <button class="btn go wide" id="lock">Play</button>`;
   const car = $('#car');
   const cards = [...car.children];
   const sync = () => {
@@ -134,7 +135,6 @@ function pick() {
     current = best;
     cards.forEach((el, i) => el.classList.toggle('cur', i === best));
     [...document.querySelectorAll('.dots i')].forEach((el, i) => el.classList.toggle('on', i === best));
-    $('#lock').textContent = 'Play ' + LABEL[CARDS[best]];
   };
   car.addEventListener('scroll', () => requestAnimationFrame(sync), { passive: true });
   cards.forEach((el, i) => el.addEventListener('click', () => el.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' })));
@@ -142,7 +142,7 @@ function pick() {
   const start = cards[Math.min(current, cards.length - 1)];
   car.scrollLeft = start.offsetLeft + start.offsetWidth / 2 - car.clientWidth / 2;
   sync();
-  $('#lock').onclick = () => { buzz(30); act('choose', { card: CARDS[current] }); };
+  $('#lock').onclick = () => { buzz(30); justLocked = true; act('choose', { card: CARDS[current] }); };
 }
 
 function updateTargets() {
@@ -156,11 +156,17 @@ function updateTargets() {
 }
 
 function locked() {
+  // Same layout as the card picker, so the chosen card turns over in place.
+  const card = state.you.choice;
+  current = Math.max(0, CARDS.indexOf(card)); // "Change card" reopens the picker on this card
   view.innerHTML = `
-    <div class="cardback hand"></div>
-    <h2>Locked in</h2>
-    <p class="pad">Phone down, eyes on the board — the reveal happens there.</p>
-    <button class="btn ghost" id="undo">Change card</button>`;
+    <div class="hint lockedlbl">Locked in</div>
+    <div class="dots" style="visibility:hidden">${CARDS.map(() => '<i></i>').join('')}</div>
+    <div class="stagecard"><div class="flipcard${justLocked ? ' anim' : ''}">
+      <img src="/img/${card}.jpg" alt="${LABEL[card]}" draggable="false"><div class="cardback q"></div>
+    </div></div>
+    <button class="btn ghost wide" id="undo">Change card</button>`;
+  justLocked = false;
   $('#undo').onclick = () => act('unchoose');
 }
 

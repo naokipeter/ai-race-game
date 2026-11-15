@@ -63,11 +63,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
   background-size: 100% 100%, 12% 8%, 12% 8%;
   box-shadow: 0 0 0 2px #fff inset, 0 0 0 4px var(--sky) inset;
 }
+/* card back: a question mark (size set by --ai, or by the container on the phone) */
 .cardback::after {
-  content: 'AI\A RACE'; white-space: pre; text-align: center; line-height: 1.15;
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  width: 78%; padding: .7em 0; border-radius: 10%/22%;
-  font-family: var(--display); font-weight: 800; font-size: calc(var(--ai, 2rem) * .82); letter-spacing: .06em; color: #fff;
+  content: '?'; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 50%; aspect-ratio: 1; display: grid; place-items: center; border-radius: 20%; line-height: 1;
+  font-family: var(--display); font-weight: 800; font-size: calc(var(--ai, 2rem) * 1.8); color: #fff;
   background: #071033; box-shadow: 0 0 0 2px var(--sky), 0 0 24px var(--sky);
 }
 .error { color: var(--red); font-weight: 600; min-height: 1.4em; }
